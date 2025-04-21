@@ -47,9 +47,19 @@ public class Alumno {
         materiasAprobadas.add(materia);
     }
 
-
     public double obtenerPromedio(){
         return notas.stream().mapToDouble(Double::doubleValue)
                 .average().orElse(0.0);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                Alumno: {
+                \tNombre: %s
+                \tDNI: %s
+                \tNotas: %s
+                \tMaterias aprobadas: %s
+                }""", nombre, dni, notas, materiasAprobadas);
     }
 }

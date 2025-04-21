@@ -19,36 +19,34 @@ public class GestorDeAlumnos implements IGestor {
                 ).count();
     }
 
-    public List<Alumno> top3Promedios(){
-        return alumnos.values().stream().
-                sorted(Comparator.comparing(Alumno::obtenerPromedio))
-                .limit(3).toList();
+    public List<Alumno> top3Promedios() {
+        return alumnos.values().stream()
+                .sorted(Comparator.comparing(Alumno::obtenerPromedio).reversed())
+                .limit(3)
+                .toList();
     }
 
-    public List<Alumno> nombresUnicosOrdenados(){
+    public List<String> nombresUnicosOrdenados(){
         return alumnos.values().stream()
-                .distinct().sorted().toList();
+                .map(Alumno::getNombre)
+                .distinct()
+                .sorted().toList();
+    }
+
+    public Optional<Alumno> buscarPorDni(String dni){
+        return Optional.ofNullable(alumnos.get(dni));
     }
 
     @Override
     public Optional<Alumno> agregarAlumno(Alumno alumno) {
-        if(alumnos.values().stream()
-                .anyMatch(
-                        a -> Boolean.parseBoolean(a.getDni())
-                )){
-            return Optional.empty();
-        }
-        alumnos.put(alumno.getDni(),alumno);
-        return Optional.of(alumno);
+        return Optional.ofNullable(alumnos.put(alumno.getDni(),alumno));
     }
 
     @Override
     public Optional<Alumno> agregarNota(String dni, double nota) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Alumno> agregarNotaAlumno(String dni) {
-        return Optional.empty();
+        return buscarPorDni(dni).map(a -> {
+            a.agregarNota(nota);
+            return a;
+        });
     }
 }

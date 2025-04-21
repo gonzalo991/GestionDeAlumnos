@@ -9,5 +9,4 @@ public interface IGestor {
 
     Optional<Alumno> agregarAlumno(Alumno alumno);
     Optional<Alumno> agregarNota(String dni, double nota);
-    Optional<Alumno> agregarNotaAlumno(String dni);
 }
